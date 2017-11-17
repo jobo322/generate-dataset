@@ -17,9 +17,17 @@ function generate(pureElements, options = {}) {
     checkParameters(pureElements, options);
     var compositionMatrix = createCompMatrix(options);
     let [classVector, classMatrix] = getDataClass(options);
+
+    let dataset = compositionMatrix.mmul(pureElements);
+    for (let i = 0; i < dataset.length; i++) {
+        for (let j = 0; j < dataset[i].length; j++) {
+            dataset[i][j] += Math.random() * options.noiseFactor;
+        }
+    }
+
     return {
         compositionMatrix,
-        dataset: compositionMatrix.mmul(pureElements),
+        dataset,
         classVector,
         classMatrix
     };
@@ -71,6 +79,7 @@ function checkParameters(pureElements, options) {
     if (!Array.isArray(pureElements)) throw new RangeError('pureElements should be an Array');
     if (pureElements.length < 2) throw new RangeError('pureElements array should has more than one element');
     if (!Array.isArray(options.classes)) throw new RangeError('classes should be an Array');
+    if (!options.noiseFactor) options.noiseFactor = 1;
     options.nbPureElements = pureElements.length;
 }
 

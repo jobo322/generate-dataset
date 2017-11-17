@@ -1,6 +1,7 @@
 var generate = require('../index');
 var options = {
     seed: 22,
+    noiseFactor: 0.01,
     classes: [
         {
             nbSample: 500,
